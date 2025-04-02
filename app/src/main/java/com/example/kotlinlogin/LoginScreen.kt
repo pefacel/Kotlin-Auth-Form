@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -26,11 +27,13 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -41,9 +44,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(8.dp)
+
     ) {
-        Header(Modifier.align(Alignment.TopEnd))
         Body(Modifier.align(Alignment.Center))
     }
 
@@ -52,29 +54,49 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun Body(modifier: Modifier) {
-    var email by rememberSaveable { mutableStateOf<String>("") }
+    var email by remember { mutableStateOf<String>("") }
     var password by rememberSaveable { mutableStateOf("") }
-    var isLoginEnable by rememberSaveable { mutableStateOf(false) }
-    Column(modifier = modifier) {
-        ImageLogo(Modifier.align(Alignment.CenterHorizontally))
-        Spacer(modifier = Modifier.size(16.dp))
-        Email(email) { email = it }
-        Spacer(modifier = Modifier.size(16.dp))
-        Password(password) { password = it }
-        Spacer(modifier = Modifier.size(16.dp))
-        ForgotPassword(
-            Modifier.align(
-                alignment = Alignment.End
-            )
+    var isLoginEnable by rememberSaveable { mutableStateOf(true) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.LightGray)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.bg_balloons),
+            contentDescription = "Balloons background",
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.matchParentSize()
         )
-        LoginButton(isLoginEnable)
-        Spacer(modifier = Modifier.size(16.dp))
-        LoginDivider(text = "or sign in with")
-        Spacer(modifier = Modifier.size(16.dp))
-        LoginDivider(text = "I don't have an account?")
-        Spacer(modifier = Modifier.size(16.dp))
-        SocialLogin()
+        Card(
+            modifier = modifier
+                .padding(16.dp)
+        ) {
+            Column(modifier = modifier.padding(8.dp)) {
+                ImageLogo(Modifier.align(Alignment.CenterHorizontally))
+                Spacer(modifier = Modifier.size(16.dp))
+                Email(email) { email = it }
+                Spacer(modifier = Modifier.size(16.dp))
+                Password(password) { password = it }
+                Spacer(modifier = Modifier.size(16.dp))
+                ForgotPassword(
+                    Modifier.align(
+                        alignment = Alignment.End
+                    )
+                )
+                LoginButton(isLoginEnable)
+                Spacer(modifier = Modifier.size(16.dp))
+                LoginDivider(text = "or sign in with")
+                Spacer(modifier = Modifier.size(16.dp))
+                LoginDivider(text = "I don't have an account?")
+                Spacer(modifier = Modifier.size(16.dp))
+                SocialLogin()
+            }
+        }
+
     }
+
 }
 
 @Composable
@@ -103,6 +125,10 @@ fun SocialLogin() {
 
 @Composable
 fun LoginDivider(text: String) {
+
+    val list = mutableListOf(30)
+
+
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         HorizontalDivider(
             Modifier
@@ -110,6 +136,7 @@ fun LoginDivider(text: String) {
                 .height(1.dp)
                 .weight(1f)
         )
+
         Text(
             text = text,
             modifier = Modifier.padding(horizontal = 18.dp),
@@ -152,11 +179,9 @@ fun Email(email: String, onTextChanged: (String) -> Unit) {
         value = email,
         onValueChange = { onTextChanged(it) },
         enabled = true,
-        placeholder = "E"
 
 
-
-    )
+        )
 }
 
 @Composable
